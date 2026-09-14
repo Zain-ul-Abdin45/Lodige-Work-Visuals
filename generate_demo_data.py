@@ -120,7 +120,11 @@ print(f"Wrote {len(df)} rows for {df['platform'].nunique()} platforms, "
       f"{df['date'].min()} to {df['date'].max()} -> data/demo_kpis.csv")
 
 # ---------------------------------------------------------------- AUDIENCE (period snapshot, not daily)
-# LinkedIn reports reached-member seniority; Meta (FB/IG) reports reach by age and gender.
+# LinkedIn reports reached-member seniority. Instagram (Business/Creator accounts)
+# still reports reach by age and gender via instagram_manage_insights.
+# Facebook Page Insights lost age/gender breakdowns in Meta's March 2024
+# deprecation, so it isn't generated here - showing it would misrepresent
+# what the live API can actually return.
 # These are illustrative shares of the current audience, not a time series.
 
 seniority = pd.DataFrame({
@@ -131,15 +135,11 @@ seniority.insert(0, "platform", "LinkedIn")
 seniority.to_csv("data/demo_linkedin_seniority.csv", index=False)
 
 age_gender_rows = []
-# (platform, age bracket, female %, male %) - Instagram skews a little younger than Facebook.
-age_gender_base = {
-    "Facebook": [("18-24", 7, 6), ("25-34", 19, 17), ("35-44", 14, 13), ("45-54", 9, 8), ("55+", 5, 2)],
-    "Instagram": [("18-24", 14, 12), ("25-34", 21, 18), ("35-44", 11, 9), ("45-54", 5, 4), ("55+", 3, 3)],
-}
-for platform, rows_ in age_gender_base.items():
-    for bracket, female, male in rows_:
-        age_gender_rows.append((platform, bracket, "Female", female))
-        age_gender_rows.append((platform, bracket, "Male", male))
+# (age bracket, female %, male %)
+instagram_age_gender = [("18-24", 14, 12), ("25-34", 21, 18), ("35-44", 11, 9), ("45-54", 5, 4), ("55+", 3, 3)]
+for bracket, female, male in instagram_age_gender:
+    age_gender_rows.append(("Instagram", bracket, "Female", female))
+    age_gender_rows.append(("Instagram", bracket, "Male", male))
 
 age_gender = pd.DataFrame(age_gender_rows, columns=["platform", "age_bracket", "gender", "value"])
 age_gender.to_csv("data/demo_age_gender.csv", index=False)

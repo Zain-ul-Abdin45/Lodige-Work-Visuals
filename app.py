@@ -314,7 +314,7 @@ st.caption(
     "breakdown the requested API scopes unlock."
 )
 
-audience_platforms = [p for p in selected_platforms if p in ("LinkedIn", "Facebook", "Instagram")]
+audience_platforms = [p for p in selected_platforms if p in ("LinkedIn", "Instagram")]
 
 if audience_platforms:
     a_cols = st.columns(len(audience_platforms))
@@ -361,6 +361,13 @@ if audience_platforms:
                 )
                 st.caption("Reach by age and gender")
             st.plotly_chart(fig_a, use_container_width=True, config={"displayModeBar": False})
+
+if "Facebook" in selected_platforms:
+    st.caption(
+        "Facebook isn't shown here: Meta removed age and gender breakdowns "
+        "from Page Insights in 2024. Facebook still reports views, reach and "
+        "engagement (see the tiles above), just not audience composition."
+    )
 
 st.divider()
 
